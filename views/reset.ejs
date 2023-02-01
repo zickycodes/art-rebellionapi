@@ -1,0 +1,15 @@
+<main>
+  <form
+    class="login-form"
+    action="http://localhost:5000/auth/newpassword"
+    method="POST"
+  >
+    <div class="form-control">
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" />
+    </div>
+    <input type="hidden" name="userId" value="<%= userId %>" />
+    <input type="hidden" name="passwordToken" value="<%= passwordToken %>" />
+    <button class="btn" type="submit">Update Password</button>
+  </form>
+</main>
