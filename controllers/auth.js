@@ -9,21 +9,13 @@ dotenv.config();
 
 const crypto = require("crypto");
 
-const transporter = nodemailer.createTransport(
-  // sendgridTransport({
-  //   auth: {
-  //     api_key:
-  //       "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",
-  //   },
-  // })
-  {
-    service: "gmail",
-    auth: {
-      user: "godsgiftuduak2@gmail.com",
-      pass: process.env.GOOGLE_PASS,
-    },
-  }
-);
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "godsgiftuduak2@gmail.com",
+    pass: process.env.GOOGLE_PASS,
+  },
+});
 
 const signUp = async (req, res, next) => {
   try {
