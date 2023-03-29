@@ -29,12 +29,20 @@ const signUp = async (req, res, next) => {
     }
 
     const user = await User.findOne({ email: req.body.email });
+    const username = await User.findOne({ username: req.body.username });
 
     if (user) {
       const err = new Error("Email already exists!");
       err.statusCode = 401;
       return next(err);
     }
+
+    if (username) {
+      const err = new Error("Username already exists!");
+      err.statusCode = 401;
+      return next(err);
+    }
+
     const token = crypto.randomBytes(64).toString("hex");
     const hashedPw = await bcrypt.hash(req.body.password, 12);
     const newUser = new User({
@@ -67,7 +75,7 @@ const signUp = async (req, res, next) => {
 
     return res.status(200).json({
       nUser,
-      Message:
+      message:
         "Sign up succesful. Kindly visit your email to confirm your account",
     });
   } catch (e) {
@@ -128,7 +136,9 @@ const login = async (req, res, next) => {
       process.env.JWT_TOKEN,
       { expiresIn: "1h" }
     );
-    return res.status(200).json({ token: token, userId: user._id });
+    return res
+      .status(200)
+      .json({ message: "You are logged in", token: token, userId: user._id });
   } catch (e) {
     if (!e.statusCode) {
       e.statusCode = 500;
@@ -177,7 +187,7 @@ const forgotPassCheck = async (req, res, next) => {
         to: req.body.email,
         from: "godsgiftuduak2@gmail.com",
         subject: "Password Reset!",
-        html: `<p>Kindly click this <a href="http://localhost:5000/auth/forgotpassreset/${user._id}/${token}">link</a> to reset your password</p>
+        html: `<p>Kindly click this <a href="http://localhost:3000/forgotpassword/${user._id}/${token}">link</a> to reset your password</p>
           `,
       },
       (err) => {

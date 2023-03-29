@@ -3,6 +3,7 @@ const router = express.Router();
 const { check, body } = require("express-validator");
 const isauth = require("../middleware/is-auth.");
 const userController = require("../controllers/user");
+const upload = require("../middleware/multer");
 
 // const User = require("../models/User");
 // const authcontroller = require("../controllers/auth");
@@ -11,8 +12,8 @@ const userController = require("../controllers/user");
 router.post(
   "/post",
   [
-    body("title").not().isEmpty().withMessage("title is required"),
-    body("content").not().isEmpty().withMessage("content is required"),
+    body("title").isEmpty().withMessage("title is required"),
+    body("content").isEmpty().withMessage("content is required"),
     body("category")
       .not()
       .isIn(["tech", "science", "business", "others"])
@@ -21,9 +22,15 @@ router.post(
       ),
   ],
   isauth,
+  upload.single("image"),
   userController.createPost
 );
-router.post("/post/:id", isauth, userController.updatePost);
+router.post(
+  "/post/:id",
+  isauth,
+  upload.single("image"),
+  userController.updatePost
+);
 router.get("/post", userController.getPosts);
 router.get("/post/:postid", userController.getPost);
 router.delete("/post/:id", isauth, userController.deletePost);

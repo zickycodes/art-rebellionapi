@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
-const dotenv = require("dotenv");
+// const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const multer = require("multer");
+
 const path = require("path");
 const bodyParser = require("body-parser");
 
@@ -10,7 +10,7 @@ const authRoute = require("./routes/auth");
 const userRoute = require("./routes/users");
 const adminRoute = require("./routes/admin");
 
-dotenv.config();
+// dotenv.config();
 
 // app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -27,36 +27,9 @@ try {
   };
   mongCon();
 } catch (error) {
+  console.log(error);
   handleError(error);
 }
-
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + "-" + file.originalname);
-  },
-});
-
-const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg"
-  ) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
-
-const upload = multer({
-  storage: fileStorage,
-  fileFilter: fileFilter,
-  limits: { fileSize: 1 * 1024 * 1024 },
-}).single("image");
-app.use(upload);
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 

@@ -21,7 +21,7 @@ router.post(
 router.post("/login", authcontroller.login);
 router.get("/confirmaccount/:token", authcontroller.confirmSignUp);
 router.post("/forgotpasscheck", authcontroller.forgotPassCheck);
-router.get("/forgotpassreset/:userId/:token", authcontroller.resetPassPage);
+// router.get("/forgotpassreset/:userId/:token", authcontroller.resetPassPage);
 router.post("/newpassword", authcontroller.postPassReset);
 
 module.exports = router;
